@@ -6,7 +6,6 @@ mod = Blueprint('general', __name__)
 
 @mod.route('/')
 def index():
-    d = g
     return render_template('index.html')
 
 
