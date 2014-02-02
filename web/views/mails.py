@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, json
+from flask import Blueprint, jsonify, json, request, render_template
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import joinedload, subqueryload
 from web import db
@@ -22,7 +22,8 @@ class AlchemyEncoder(json.JSONEncoder):
             return fields
         return json.JSONEncoder.default(self, obj)
 
-@mod.route('/api/getmails', methods=['GET'])
-def get_mails():
-    mails = db.session.query(Mail).options(subqueryload(Mail.mails)).filter(Mail.in_reply_to == None).all()
-    return json.dumps(mails, cls=AlchemyEncoder)
+@mod.route('/mails/', methods=['GET'], defaults={'ident': None})
+@mod.route('/mails/<ident>', methods=['GET'])
+def get_mails(ident):
+    mails = db.session.query(Mail).filter(Mail.in_reply_to == ident).all()
+    return render_template('mails.html', mails=mails)

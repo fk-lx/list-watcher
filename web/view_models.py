@@ -1,0 +1,4 @@
+
+
+class Mail(object):
+    pass

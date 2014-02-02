@@ -2,16 +2,12 @@ from web import db
 
 
 class Mail(db.Model):
-    #id = db.Column(db.Integer, primary_key=True)
+    message_id = db.Column(db.Integer, primary_key=True)
+    in_reply_to = db.Column(db.Integer, db.ForeignKey('mail.message_id'))
     sender = db.Column(db.Text)
     subject = db.Column(db.Text)
     body = db.Column(db.Text)
-    #in_reply_to = db.Column(db.Text, nullable=True)
-    message_id = db.Column(db.Integer, primary_key=True)
-    in_reply_to = db.Column(db.Integer, db.ForeignKey(message_id))
-    #mail_id = db.Column(db.Text, db.ForeignKey(message_id))
-    #mail_id = db.Column(db.Integer, db.ForeignKey(id))
-    mails = db.relationship('Mail', remote_side=[message_id])
+    mails = db.relationship('Mail', lazy="joined", join_depth=2)
     def __repr__(self):
         return '<Mail %r>' % self.mails
 

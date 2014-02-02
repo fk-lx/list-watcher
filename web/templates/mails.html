@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% if mails != None %}
+        <h2>Responses: </h2>
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="mail-table">
+        <thead>
+            <tr>
+                <th>Tags</th>
+                <th>Sender</th>
+                <th>Subject</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mail in mails %}
+            <tr>
+                <td>Tags</td>
+                <td>{{ mail.sender  }}</td>
+                <td><a href="{{ url_for('mails.get_mails', ident=mail.message_id) }}"> {{ mail.subject}} </a></td>
+                <td>Date</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    {% endif %}
+</table>
+<script src="{{ url_for('static', filename='js/mails.js') }}" ></script>
+{% endblock %}
+
+
