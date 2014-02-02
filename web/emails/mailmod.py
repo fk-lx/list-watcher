@@ -1,12 +1,15 @@
 from email.utils import parsedate, parsedate_tz
+from flask import Flask
 import imaplib
 import datetime
 import email
 from operator import attrgetter
 
+app = Flask(__name__)
+app.config.from_object('config')
 
-def fetch_emails(valid_from=None, valid_to=None, host='imap.gmail.com', port=993, login='opensource.mer@gmail.com',
-                 password='asdasd1234', folder='mer'): #TODO: Keep it in the config file
+def fetch_emails(valid_from=None, valid_to=None, host=app.config.get('MAIL_HOST'), port=app.config.get('MAIL_PORT'), login=app.config.get('MAIL_LOGIN'),
+                 password=app.config.get('MAIL_PASSWORD'), folder=app.config.get('MAIL_FILTER')):
     if valid_from is None and valid_to is None:
         return []
     client = imaplib.IMAP4_SSL(host, port)
