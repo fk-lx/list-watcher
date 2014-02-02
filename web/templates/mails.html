@@ -1,12 +1,20 @@
 {% extends "layout.html" %}
 
 {% block content %}
+    {% if mail != None %}
+
+        <form id="remark-form">Remarks: <input id="remark" value="{{ mail.remarks }}"/> <input id="ident" type="hidden" value="{{ mail.message_id }}" /><input id='submitbtn' type="submit"/> </form><br>
+        Sender: {{ mail.sender }}<br>
+        Subject: {{ mail.subject }} <br>
+        Body: {{ mail.body }}
+        Date: {{ mail.date }}
+    {% endif %}
     {% if mails != None %}
         <h2>Responses: </h2>
         <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="mail-table">
         <thead>
             <tr>
-                <th>Tags</th>
+                <th>Remarks</th>
                 <th>Sender</th>
                 <th>Subject</th>
                 <th>Date</th>
@@ -15,10 +23,10 @@
         <tbody>
             {% for mail in mails %}
             <tr>
-                <td>Tags</td>
+                <td>{{ mail.remarks }}</td>
                 <td>{{ mail.sender  }}</td>
                 <td><a href="{{ url_for('mails.get_mails', ident=mail.message_id) }}"> {{ mail.subject}} </a></td>
-                <td>Date</td>
+                <td>{{ mail.date }}</td>
             </tr>
             {% endfor %}
         </tbody>

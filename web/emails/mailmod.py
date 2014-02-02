@@ -1,3 +1,4 @@
+from email.utils import parsedate, parsedate_tz
 import imaplib
 import datetime
 import email
@@ -5,7 +6,7 @@ from operator import attrgetter
 
 
 def fetch_emails(valid_from=None, valid_to=None, host='imap.gmail.com', port=993, login='opensource.mer@gmail.com',
-                 password='hehe', folder='mer'): #TODO: Keep it in the config file
+                 password='asdasd1234', folder='mer'): #TODO: Keep it in the config file
     if valid_from is None and valid_to is None:
         return []
     client = imaplib.IMAP4_SSL(host, port)
@@ -56,7 +57,9 @@ def parse_emails(emails):
         data = {'InReplyTo': raw_email['In-Reply-To'],
                 'Body': get_first_text_block(raw_email),
                 'Subject': raw_email['Subject'],
-                'MessageId': raw_email['Message-ID']}
+                'MessageId': raw_email['Message-ID'],
+                'From': raw_email['From'],
+                'Date': datetime.datetime.fromtimestamp(email.utils.mktime_tz(parsedate_tz(raw_email['Date'])))}
         dt.append(data)
     dt.sort(key=lambda x: x['InReplyTo'])
     return dt

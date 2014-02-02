@@ -25,5 +25,14 @@ class AlchemyEncoder(json.JSONEncoder):
 @mod.route('/mails/', methods=['GET'], defaults={'ident': None})
 @mod.route('/mails/<ident>', methods=['GET'])
 def get_mails(ident):
+    mail = db.session.query(Mail).filter(Mail.message_id == ident).first()
     mails = db.session.query(Mail).filter(Mail.in_reply_to == ident).all()
-    return render_template('mails.html', mails=mails)
+    return render_template('mails.html', mails=mails, mail=mail)
+
+@mod.route('/mails/', methods=['POST'])
+def update_remark():
+    remarks = request.form["remark"]
+    ident = request.form["ident"]
+    mail = db.session.query(Mail).filter(Mail.message_id == ident).first()
+    mail.remarks = remarks
+    db.session.commit()

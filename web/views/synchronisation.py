@@ -19,6 +19,8 @@ def synchronise():
         mail_entity.body = mail['Body']
         mail_entity.subject = mail['Subject']
         mail_entity.message_id = hashify(mail['MessageId'])
+        mail_entity.sender = mail['From']
+        mail_entity.date = mail['Date']
         if mail['InReplyTo'] is not None:
             mail_entity.in_reply_to = hashify(mail['InReplyTo'])
         db.session.add(mail_entity)

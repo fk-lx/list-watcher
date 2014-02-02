@@ -7,18 +7,16 @@ class Mail(db.Model):
     sender = db.Column(db.Text)
     subject = db.Column(db.Text)
     body = db.Column(db.Text)
-    mails = db.relationship('Mail', lazy="joined", join_depth=2)
+    date = db.Column(db.DATETIME)
+    remarks = db.Column(db.Text, nullable=True)
     def __repr__(self):
         return '<Mail %r>' % self.mails
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    openid = db.Column(db.String(100))
-
-    def __init__(self, name, openid):
-        self.name = name
-        self.openid = openid
+    email = db.Column(db.NVARCHAR(100), nullable=False)
+    openid = db.Column(db.NVARCHAR(100), nullable=True)
 
     def __repr__(self):
-        return '<User %r>' % self.name
+        return '%r' % self.email

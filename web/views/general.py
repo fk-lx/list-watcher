@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint, g, session, flash, redirect, url_for, request
-from web import oid
+from web import oid, db
+from web.database.entities import User
 
 mod = Blueprint('general', __name__)
 
@@ -30,18 +31,19 @@ def logout():
     return redirect(oid.get_next_url())
 
 
-@mod.before_request
+@mod.before_app_request
 def lookup_current_user():
     g.user = None
     if 'openid' in session:
         openid = session['openid']
-        g.user = openid
+        user = db.session.query(User).filter(User.openid == openid).first()
+        g.user = user
 
 
 @oid.after_login
 def create_or_login(resp):
     session['openid'] = resp.identity_url
-    user = resp.identity_url
+    user = db.session.query(User).filter(User.email == resp.email).first()
     if user is not None:
         flash(u'Successfully signed in')
         g.user = user
