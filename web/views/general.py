@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint, g, session, flash, redirect, url_for, request
-from web import oid, db
+from flask.ext.login import login_user
+from web import oid, db, lm
 from web.database.entities import User
 
 mod = Blueprint('general', __name__)
@@ -42,11 +43,16 @@ def lookup_current_user():
 
 @oid.after_login
 def create_or_login(resp):
-    session['openid'] = resp.identity_url
     user = db.session.query(User).filter(User.email == resp.email).first()
     if user is not None:
         flash(u'Successfully signed in')
+        session['openid'] = resp.identity_url
         g.user = user
+        login_user(user)
         return redirect(oid.get_next_url())
-    return redirect(url_for('create_profile', next=oid.get_next_url(), name=resp.fullname or resp.nickname),
-                    email=resp.email)
+    flash(u'You are not authenticated.')
+    return redirect(oid.get_next_url())
+
+@lm.user_loader
+def load_user(userid):
+    return User.query.get(int(userid))

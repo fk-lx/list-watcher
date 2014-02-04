@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, json, request, render_template
+from flask.ext.login import login_required
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import joinedload, subqueryload
 from web import db
@@ -30,9 +31,11 @@ def get_mails(ident):
     return render_template('mails.html', mails=mails, mail=mail)
 
 @mod.route('/mails/', methods=['POST'])
+@login_required
 def update_remark():
     remarks = request.form["remark"]
     ident = request.form["ident"]
     mail = db.session.query(Mail).filter(Mail.message_id == ident).first()
     mail.remarks = remarks
     db.session.commit()
+    return jsonify(success=True)

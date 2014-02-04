@@ -6,8 +6,10 @@ from web.emails.mailmod import fetch_emails, parse_emails
 
 mod = Blueprint('synchronisation', __name__)
 
+
 def hashify(s):
     return abs(hash(s)) % (10 ** 8)
+
 
 @mod.route('/api/synchronise', methods=["POST"])
 def synchronise():
