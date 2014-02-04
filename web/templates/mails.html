@@ -2,12 +2,15 @@
 
 {% block content %}
     {% if mail != None %}
-
-        <form id="remark-form">Remarks: <input id="remark" value="{{ mail.remarks }}"/> <input id="ident" type="hidden" value="{{ mail.message_id }}" /><input id='submitbtn' type="submit"/> </form><br>
-        Sender: {{ mail.sender }}<br>
-        Subject: {{ mail.subject }} <br>
-        Body: {{ mail.body }}
-        Date: {{ mail.date }}
+        {% if g.user %}
+            <form id="remark-form"><label>Remarks:</label> <input id="remark" value="{{ mail.remarks }}"/> <input id="ident" type="hidden" value="{{ mail.message_id }}" /><input id='submitbtn' type="submit"/> </form><br>
+        {% else %}
+        <label>Remarks:</label> {{ mail.remarks }}<br>
+        {% endif %}
+        <label>Sender</label>: {{ mail.sender }}<br>
+        <label>Subject</label>: {{ mail.subject }} <br>
+        <label>Body</label>: {{ mail.body }}<br>
+        <label>Date</label>: {{ mail.date }}
     {% endif %}
     {% if mails != None %}
         <h2>Responses: </h2>

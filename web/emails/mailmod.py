@@ -8,7 +8,9 @@ from operator import attrgetter
 app = Flask(__name__)
 app.config.from_object('config')
 
-def fetch_emails(valid_from=None, valid_to=None, host=app.config.get('MAIL_HOST'), port=app.config.get('MAIL_PORT'), login=app.config.get('MAIL_LOGIN'),
+
+def fetch_emails(valid_from=None, valid_to=None, host=app.config.get('MAIL_HOST'), port=app.config.get('MAIL_PORT'),
+                 login=app.config.get('MAIL_LOGIN'),
                  password=app.config.get('MAIL_PASSWORD'), folder=app.config.get('MAIL_FILTER')):
     if valid_from is None and valid_to is None:
         return []
@@ -38,6 +40,7 @@ def fetch_emails(valid_from=None, valid_to=None, host=app.config.get('MAIL_HOST'
         emails.append(data)
     return emails
 
+
 def get_first_text_block(email_message_instance):
     maintype = email_message_instance.get_content_maintype()
     if maintype == 'multipart':
@@ -46,11 +49,6 @@ def get_first_text_block(email_message_instance):
                 return part.get_payload()
     elif maintype == 'text':
         return email_message_instance.get_payload()
-
-
-
-def xstr(s):
-    return '' if s is None else str(s)
 
 
 def parse_emails(emails):
