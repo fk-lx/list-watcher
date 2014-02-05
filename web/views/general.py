@@ -37,7 +37,7 @@ def lookup_current_user():
     g.user = None
     if 'openid' in session:
         openid = session['openid']
-        user = db.session.query(User).filter(User.openid == openid).first()
+        user = db.session.query(User).filter(User.email == openid).first()
         g.user = user
 
 
@@ -46,7 +46,7 @@ def create_or_login(resp):
     user = db.session.query(User).filter(User.email == resp.email).first()
     if user is not None:
         flash(u'Successfully signed in')
-        session['openid'] = resp.identity_url
+        session['openid'] = resp.email
         g.user = user
         login_user(user)
         return redirect(oid.get_next_url())
