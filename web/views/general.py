@@ -15,7 +15,7 @@ def index():
 @oid.loginhandler
 def login():
     if g.user is not None:
-        return redirect(oid.get_next_url())
+        return redirect(url_for('general.index'))
     if request.method == 'POST':
         openid = request.form.get('openid')
         if openid:
