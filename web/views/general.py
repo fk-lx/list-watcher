@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, g, session, flash, redirect, url_for, request
-from flask.ext.login import login_user
+from flask.ext.login import login_user, logout_user
 from web import oid, db, lm
 from web.database.entities import User
 
@@ -28,6 +28,7 @@ def login():
 @mod.route('/logout')
 def logout():
     session.pop('openid', None)
+    logout_user()
     flash(u'You were signed out')
     return redirect(oid.get_next_url())
 

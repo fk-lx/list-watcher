@@ -20,10 +20,10 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'general.login'
 
-from web.views import general, synchronisation, mails
+from web.views import general, synchronisation, mails, tags
 
 app.register_blueprint(general.mod)
 app.register_blueprint(synchronisation.mod)
 app.register_blueprint(mails.mod)
-
+app.register_blueprint(tags.mod)
 

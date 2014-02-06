@@ -9,6 +9,7 @@ class Mail(db.Model):
     body = db.Column(db.Text)
     date = db.Column(db.DATETIME)
     remarks = db.Column(db.Text, nullable=True)
+
     def __repr__(self):
         return '<Mail %r>' % self.mails
 
@@ -32,3 +33,13 @@ class User(db.Model):
 
     def __repr__(self):
         return '%r' % self.email
+
+
+class Tag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.NVARCHAR(100), nullable=False)
+
+    def __repr__(self):
+        return '<Tag %r>' % self.name
+
+
