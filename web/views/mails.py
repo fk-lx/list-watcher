@@ -27,7 +27,7 @@ class AlchemyEncoder(json.JSONEncoder):
 @mod.route('/mails/<ident>', methods=['GET'])
 def get_mails(ident):
     mail = db.session.query(Mail).filter(Mail.message_id == ident).first()
-    mails = db.session.query(Mail).filter(Mail.in_reply_to == ident).all()
+    mails = db.session.query(Mail).filter(Mail.in_reply_to == ident).order_by(Mail.date.desc()).all()
     return render_template('mails.html', mails=mails, mail=mail)
 
 @mod.route('/mails/', methods=['POST'])
