@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm import joinedload, subqueryload
 from web import db
 from web.database.entities import Mail
+from web.database.entities import Tag
 
 mod = Blueprint('mails', __name__)
 
@@ -30,12 +31,16 @@ def get_mails(ident):
     mails = db.session.query(Mail).filter(Mail.in_reply_to == ident).order_by(Mail.date.desc()).all()
     return render_template('mails.html', mails=mails, mail=mail)
 
-@mod.route('/mails/', methods=['POST'])
 @login_required
-def update_remark():
-    remarks = request.form["remark"]
-    ident = request.form["ident"]
-    mail = db.session.query(Mail).filter(Mail.message_id == ident).first()
-    mail.remarks = remarks
-    db.session.commit()
+@mod.route('/mails/addtag/', methods=['POST'])
+def add_mail_tags():
+    tags = request.form.getlist("tags")
+    mail_id = request.referrer.split('/')[-1]
+    mail = db.session.query(Mail).filter(Mail.message_id == mail_id).first()
+    for t in mail.tags[:]:
+        mail.tags.remove(t)
+    for tag in tags:
+        tag = db.session.query(Tag).filter(Tag.name == tag).first()
+        mail.tags.append(tag)
+    db.session.commit();
     return jsonify(success=True)

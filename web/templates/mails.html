@@ -1,12 +1,48 @@
 {% extends "layout.html" %}
 
 {% block content %}
+    </script>
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/jquery.tagit.css') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/tagit.ui-zendesk.css') }}">
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="{{ url_for('static', filename='js/tag-it.js') }}" charset="utf-8"> </script>
+    {% if g.user %}
+        <script>
+            $(function(){
+                $('#myTags').tagit({
+                    readOnly: false,
+                    allowSpaces: false
+                });
+
+            });
+        </script>
+    {% else %}
+        <script>
+            $(function(){
+                $('#myTags').tagit({
+                    readOnly: true,
+                    allowSpaces: false
+                });
+
+            });
+        </script>
+    {% endif %}
+
     {% if mail != None %}
-        {% if g.user %}
-            <form id="remark-form"><label>Remarks:</label> <input id="remark" value="{{ mail.remarks }}"/> <input id="ident" type="hidden" value="{{ mail.message_id }}" /><input id='submitbtn' type="submit"/> </form><br>
-        {% else %}
-        <label>Remarks:</label> {{ mail.remarks }}<br>
-        {% endif %}
+        <form role="form" action="/mails/addtag/" id="addtagsform">
+            <p>
+                Tags
+            </p>
+            <ul id="myTags"></ul>
+            {% if g.user %}
+                <input type="submit" value="Submit" formmethod="post">
+            {% endif %}
+        </form><br>
         <label>Sender</label>: {{ mail.sender }}<br>
         <label>Subject</label>: {{ mail.subject }} <br>
         <label>Body</label>: {{ mail.body }}<br>
@@ -17,7 +53,6 @@
         <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="mail-table">
         <thead>
             <tr>
-                <th>Remarks</th>
                 <th>Sender</th>
                 <th>Subject</th>
                 <th>Date</th>
@@ -26,7 +61,6 @@
         <tbody>
             {% for mail in mails %}
             <tr>
-                <td>{{ mail.remarks }}</td>
                 <td>{{ mail.sender  }}</td>
                 <td><a href="{{ url_for('mails.get_mails', ident=mail.message_id) }}"> {{ mail.subject}} </a></td>
                 <td>{{ mail.date }}</td>
