@@ -24,7 +24,13 @@
                            $('#myTags').tagit({
                                             readOnly: false,
                                             allowSpaces: false,
-                                            availableTags: t
+                                            availableTags: t,
+                                            beforeTagAdded: function(event, ui) {
+                                                if($.inArray(ui.tagLabel, t) == -1)
+                                                {
+                                                    return false;
+                                                }
+                                            }
                             });
                        }});
                 $('#addtagsform').submit(function(event){
