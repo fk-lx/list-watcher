@@ -1,5 +1,10 @@
 from web import db
 
+mailtags = db.Table('mailtags',
+                    db.Column('mail_id', db.Integer, db.ForeignKey('mail.message_id')),
+                    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
+)
+
 
 class Mail(db.Model):
     message_id = db.Column(db.Integer, primary_key=True)
@@ -8,7 +13,8 @@ class Mail(db.Model):
     subject = db.Column(db.Text)
     body = db.Column(db.Text)
     date = db.Column(db.DATETIME)
-    remarks = db.Column(db.Text, nullable=True)
+    tags = db.relationship('Tag', secondary=mailtags,
+                           backref=db.backref('mails', lazy='dynamic'))
 
     def __repr__(self):
         return '<Mail %r>' % self.mails
@@ -41,5 +47,3 @@ class Tag(db.Model):
 
     def __repr__(self):
         return '<Tag %r>' % self.name
-
-

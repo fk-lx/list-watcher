@@ -7,16 +7,4 @@ $(document).ready(function(){
         "sWrapper": "dataTables_wrapper form-inline"
     } );
 
-
-    $('#remark-form').submit(function(event){
-        var ident = $('#ident').val();
-        var remark = $('#remark').val();
-        event.preventDefault();
-
-        $.ajax({
-            type: 'POST',
-            url:  '/mails/',
-            data: { ident: ident, remark: remark}
-        });
-    });
 });
