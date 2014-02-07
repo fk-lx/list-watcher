@@ -29,7 +29,8 @@ class AlchemyEncoder(json.JSONEncoder):
 def get_mails(ident):
     mail = db.session.query(Mail).filter(Mail.message_id == ident).first()
     mails = db.session.query(Mail).filter(Mail.in_reply_to == ident).order_by(Mail.date.desc()).all()
-    return render_template('mails.html', mails=mails, mail=mail)
+    tags = mail.tags if mail is not None else None
+    return render_template('mails.html', mails=mails, mail=mail, tags=tags)
 
 @login_required
 @mod.route('/mails/addtag/', methods=['POST'])
@@ -44,3 +45,9 @@ def add_mail_tags():
         mail.tags.append(tag)
     db.session.commit();
     return jsonify(success=True)
+
+@mod.route('/mails/tags/<mail_id>', methods=['GET'])
+def get_tags(mail_id):
+    mail = db.session.query(Mail).filter(Mail.message_id == mail_id).first()
+    return json.dumps(mail.tags, cls=AlchemyEncoder)
+

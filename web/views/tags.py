@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, jsonify, request
+from flask import Blueprint, render_template, redirect, url_for, jsonify, request, json
 from flask.ext.login import login_required
 from web import db
 from web.database.entities import Tag
+from web.views.mails import AlchemyEncoder
 
 mod = Blueprint('tags', __name__)
 
@@ -43,3 +44,7 @@ def delete_tag():
     return jsonify(success=True)
 
 
+@mod.route('/tags/all')
+def get_all_tags():
+    tags = db.session.query(Tag).all()
+    return json.dumps(tags, cls=AlchemyEncoder)

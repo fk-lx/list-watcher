@@ -46,4 +46,4 @@ class Tag(db.Model):
     name = db.Column(db.NVARCHAR(100), nullable=False)
 
     def __repr__(self):
-        return '<Tag %r>' % self.name
+        return self.name

@@ -1,29 +1,46 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    </script>
     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
 
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/jquery.tagit.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/tagit.ui-zendesk.css') }}">
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}" > </script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.js') }}" type="text/javascript" charset="utf-8"></script>
 
     <script src="{{ url_for('static', filename='js/tag-it.js') }}" charset="utf-8"> </script>
     {% if g.user %}
         <script>
-            $(function(){
-                $('#myTags').tagit({
-                    readOnly: false,
-                    allowSpaces: false
+            $(document).ready(function(){
+                $.ajax({
+                       url: '/tags/all',
+                       type: 'GET',
+                       success: function(data){
+                           var tags = JSON.parse(data);
+                           var t = [];
+                           $(tags).each(function(){
+                               t.push(this.name);
+                           });
+                           $('#myTags').tagit({
+                                            readOnly: false,
+                                            allowSpaces: false,
+                                            availableTags: t
+                            });
+                       }});
+                $('#addtagsform').submit(function(event){
+                   event.preventDefault();
+                   var str = $(this).serialize();
+                   $.ajax({
+                       url: '/mails/addtag/',
+                       type: 'POST',
+                       data: str
+                    });
                 });
-
             });
         </script>
     {% else %}
         <script>
-            $(function(){
+            $(document).ready(function(){
                 $('#myTags').tagit({
                     readOnly: true,
                     allowSpaces: false
@@ -38,7 +55,11 @@
             <p>
                 Tags
             </p>
-            <ul id="myTags"></ul>
+            <ul id="myTags">
+                {% for tag in tags %}
+                    <li id="{{ tag.id }}">{{ tag.name }}</li>
+                {% endfor %}
+            </ul>
             {% if g.user %}
                 <input type="submit" value="Submit" formmethod="post">
             {% endif %}
@@ -67,8 +88,9 @@
             </tr>
             {% endfor %}
         </tbody>
+
+        </table>
     {% endif %}
-</table>
 <script src="{{ url_for('static', filename='js/mails.js') }}" ></script>
 {% endblock %}
 
