@@ -1,21 +1,26 @@
 $(document).ready(function(){
-   $('.edit').click(function(){
+   $('ul').on('click', '.edit', function(){
+       var editInput = $('<input type=text>');
+       $(this).closest('div').attr('visible', 'false');
 
    });
+
+
+    $(".click").editable('/tags/edit/', {
+        tooltip : "Click to edit...",
+        style : "inherit"
+    });
 
    $('ul').on('click', '.delete', function(){
        var parent = $(this).closest('li');
        var id = $(this).attr('data-id');
+       parent.remove();
        $.ajax({
             url: '/tags/delete',
             type: 'DELETE',
             dataType: 'json',
             contentType: 'application/json',
-            data: '{ "id":' + id +"}",
-            success : function()
-            {
-                parent.remove();
-            }
+            data: '{ "id":' + id +"}"
        });
    });
 

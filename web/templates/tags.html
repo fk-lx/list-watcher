@@ -9,10 +9,13 @@
     </form>
     <ul id="tag-list">
     {% for tag in tags %}
-        <li id="{{ tag.id }}">{{ tag.name }}<span data-id='{{ tag.id }}' class="glyphicon glyphicon-edit edit" ></span> <span id='delete' data-id='{{ tag.id }}' class="glyphicon glyphicon-remove delete" ></span></li>
+        <li id="{{ tag.id }}"><div class="click" id="div_2">{{ tag.name }}</div><span data-id='{{ tag.id }}' class="glyphicon glyphicon-edit edit" ></span> <span id='delete' data-id='{{ tag.id }}' class="glyphicon glyphicon-remove delete" ></span></li>
     {% endfor %}
     </ul>
 
 
+
 <script src="{{ url_for('static', filename='js/tags.js') }}" ></script>
+<script src="{{ url_for('static', filename='js/bootstrap-tagsinput.min.js') }}" ></script>
+<script src="{{ url_for('static', filename='js/jquery.jeditable.mini.js') }}" ></script>
 {% endblock %}
