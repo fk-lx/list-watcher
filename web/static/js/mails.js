@@ -7,4 +7,8 @@ $(document).ready(function(){
         "sWrapper": "dataTables_wrapper form-inline"
     } );
 
+    $('.mailTags').tagit({
+            readOnly: true,
+            allowSpaces: false
+    });
 });
