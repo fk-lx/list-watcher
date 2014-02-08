@@ -24,15 +24,15 @@ def add_tag():
     return jsonify(id=tag.id)
 
 @login_required
-@mod.route('/tags/edit', methods=['PUT'])
+@mod.route('/tags/edit/', methods=['POST'])
 def edit_tag():
-    req_json = request.get_json()
-    tag_id = req_json['id']
-    name = req_json['name']
+    rq_form = request.form
+    tag_id = rq_form['id']
+    name = rq_form['value']
     tag = db.session.query(Tag).filter(Tag.id == tag_id).first()
     tag.name = name
     db.session.commit()
-    return jsonify(success=True)
+    return name
 
 @login_required
 @mod.route('/tags/delete', methods=['DELETE'])

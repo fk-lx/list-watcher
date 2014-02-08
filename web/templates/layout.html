@@ -24,7 +24,8 @@
           </div>
 
           <ul class="nav navbar-nav">
-            <li class="active"><a href="{{ url_for('mails.get_mails') }}">mails</a></li>
+            <li><a href="{{ url_for('mails.get_mails') }}">mails</a></li>
+            {% if g.user %}<li><a href="{{ url_for('tags.view_tags') }}">tags</a></li>{% endif %}
           </ul>
 
           <!-- Collect the nav links, forms, and other content for toggling -->

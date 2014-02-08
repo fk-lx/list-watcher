@@ -5,11 +5,19 @@ $(document).ready(function(){
 
    });
 
-
-    $(".click").editable('/tags/edit/', {
+    /*$(".click").editable('/tags/edit/', {
         tooltip : "Click to edit...",
         style : "inherit"
+
+    });*/
+
+    $("body").on('click', '.click', function(){
+        $(this).editable('/tags/edit/', {
+            tooltip : "Click to edit...",
+            style : "inherit"
+        });
     });
+
 
    $('ul').on('click', '.delete', function(){
        var parent = $(this).closest('li');
@@ -36,10 +44,9 @@ $(document).ready(function(){
             data: '{ "name": "' + name +'"}',
             success: function(data)
             {
-                ul.append('<li id="'+data.id+'">'
+                ul.append('<li id="'+data.id+'"><div class="click" id="'+data.id+'">'
                     + name +
-                    '<span data-id="'
-                    +data.id+'" class="glyphicon glyphicon-edit edit" ></span> <span id="delete" data-id="'+data.id+'"class="glyphicon glyphicon-remove delete" ></span></li>');
+                    '</div> <span id="delete" data-id="'+data.id+'"class="glyphicon glyphicon-remove delete" ></span></li>');
 
             }
         });
